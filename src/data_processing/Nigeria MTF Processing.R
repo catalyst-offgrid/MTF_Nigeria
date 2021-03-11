@@ -1,7 +1,7 @@
 # Nigeria MTF
 library(tidyverse)
 library(tidyr)
-library(RCMIP5)
+#library(RCMIP5)
 library(haven)
 library(readstata13)
 library(foreign)
@@ -10,7 +10,7 @@ library(expss)
 library(seplyr)
 library(fastDummies)
 library(purrr)
-setwd("~/Catalyst Off-Grid Advisors/Access Insights Platform/raw-data (1)/TO UPLOAD")
+setwd("~/Catalyst/MTF_Nigeria/src/data_processing/raw_data") #Change file path for personal use
 
 haven_read <- function(file_name, read_factor = 1){
   if(read_factor == 1){
@@ -41,7 +41,11 @@ source_use_freq <- function(test_str, var_name){
 
 # Read STATA files and combine into a Large List
 StataList <- list.files(pattern = '*.dta')
-merged_StataList <- lapply(list.files(pattern="*.dta",recursive=FALSE, full.names=TRUE), read.dta13, nonint.factors = TRUE)
+merged_StataList <- lapply(list.files(pattern="*.dta",recursive=FALSE, full.names=TRUE), readstata13::read.dta13, nonint.factors = TRUE)
+nga_dta<- haven_read('NGA.dta')
+
+# names(nga_dta)[names(nga_dta) == "hh_id"] <- "HH_ID"
+elc_aggr_tier <- nga_dta[,c(16,1)]
 
 # View the first data set, "MTF_HH_SEC_C_BATTERY.dta"
 # test returns the sub dataset from the list, test2 returns the dataset with questions tagged.
@@ -49,8 +53,19 @@ test <- data.frame(merged_StataList[[1]])
 test2 <- haven_read('MTF_HH_SEC_C_BATTERY.dta')
 
 # Try to combine list of 33 elements - DO NOT RUN
-test2 <- data.frame(matrix(unlist(merged_StataList), nrow=2, byrow=TRUE), stringsAsFactors=FALSE)
-rm(test2)
+#test2 <- data.frame(matrix(unlist(merged_StataList), nrow=2, byrow=TRUE), stringsAsFactors=FALSE)
+#rm(test2)
+
+#electricity <- data.frame(merged_StataList[[8]])
+electricity <- haven_read('MTF_NG_HH_SEC_C.dta')
+electricity <- electricity %>%
+  select(1:72) %>%
+  select(-2)
+
+electricity <- 
+  list(electricity, elc_aggr_tier) %>%  
+  reduce(inner_join, by='hh_id')
+
 
 
 
