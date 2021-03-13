@@ -49,8 +49,9 @@ elc_aggr_tier <- nga_dta[,c(16,1)]
 
 # View the first data set, "MTF_HH_SEC_C_BATTERY.dta"
 # test returns the sub dataset from the list, test2 returns the dataset with questions tagged.
-test <- data.frame(merged_StataList[[1]])
-test2 <- haven_read('MTF_HH_SEC_C_BATTERY.dta')
+test <- data.frame(merged_StataList[[33]])
+#test2 <- haven_read('MTF_HH_SEC_C_BATTERY.dta')
+grepl('locality', names(test), ignore.case = T)
 
 # Try to combine list of 33 elements - DO NOT RUN
 #test2 <- data.frame(matrix(unlist(merged_StataList), nrow=2, byrow=TRUE), stringsAsFactors=FALSE)
@@ -66,7 +67,7 @@ electricity <-
   list(electricity, elc_aggr_tier) %>%  
   reduce(inner_join, by='hh_id')
 
-
+write.csv(electricity, '~/Catalyst/MTF_Nigeria/data/nigeria_grid_access.csv')
 
 
 
