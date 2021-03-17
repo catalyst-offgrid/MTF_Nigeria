@@ -71,6 +71,9 @@ electricity <-
 
 write.csv(electricity, '~/Catalyst/MTF_Nigeria/data/nigeria_grid_access.csv')
 
+cooking <- haven_read('MTF_NG_HH_SEC_I_STOVE.dta')
+cooking <- 
+  list(cooking, elc_aggr_tier) %>%  
+  reduce(inner_join, by='hh_id')
 
-
-
+write.csv(cooking, '~/Catalyst/MTF_Nigeria/data/nigeria_cooking.csv')
