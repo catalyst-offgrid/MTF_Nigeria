@@ -81,6 +81,31 @@ electricity2 <-
 
 write.csv(electricity2, '~/Catalyst/MTF_Nigeria/data/nigeria_grid_access_ext.csv')
 
+solar <- haven_read('MTF_NG_HH_SEC_C_SOLAR.dta')
+solar2 <- electricity2 %>%
+  select(1 | 108:111 | 137:154)
+
+solar <- 
+  list(solar, elc_aggr_tier) %>%  
+  reduce(inner_join, by='hh_id')
+
+solar <-
+  list(solar, solar2) %>%
+  reduce(inner_join, by='hh_id')
+
+solar$c137[which(is.na(solar$c137))] <- 0
+solar$c138[which(is.na(solar$c138))] <- 0
+solar$c139[which(is.na(solar$c139))] <- 0
+
+solar <- solar %>%
+  mutate(
+    percent_lantern = solar$c137/solar$sum_solar*100,
+    percent_lighting = solar$c138/solar$sum_solar*100,
+    percent_home = solar$c139/solar$sum_solar*100
+  )
+
+write.csv(solar, '~/Catalyst/MTF_Nigeria/data/nigeria_grid_solar.csv')
+
 cooking <- haven_read('MTF_NG_HH_SEC_I_STOVE.dta')
 cooking <- 
   list(cooking, elc_aggr_tier) %>%  
