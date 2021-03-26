@@ -60,64 +60,18 @@ grepl('locality', names(test), ignore.case = T)
 #rm(test2)
 
 #electricity <- data.frame(merged_StataList[[8]])
-electricity <- haven_read('MTF_NG_HH_SEC_C.dta')
-electricity <- electricity %>%
-  select(1:72) %>%
-  select(-2)
+wtp_solar <- haven_read('MTF_NG_HH_SEC_E.dta') #wtp = willingness to pay
 
-electricity <- 
-  list(electricity, elc_aggr_tier) %>%  
+wtp_solar <- 
+  list(wtp_solar, elc_aggr_tier) %>%  
   reduce(inner_join, by='hh_id')
 
-write.csv(electricity, '~/Catalyst/MTF_Nigeria/data/nigeria_grid_access.csv')
+write.csv(wtp_solar, '~/Catalyst/MTF_Nigeria/data/nigeria_wtp_solar.csv')
 
-electricity2 <- haven_read('MTF_NG_HH_SEC_C.dta')
-electricity2 <- electricity2 %>%
-  select(1 | 129:287)
+housing_expense <- haven_read("MTF_NG_HH_SEC_L_30_DAYS_EXPEN.dta") #wtp = willingness to pay
 
-electricity2 <- 
-  list(electricity2, elc_aggr_tier) %>%  
+housing_expense <- 
+  list(housing_expense, elc_aggr_tier) %>%  
   reduce(inner_join, by='hh_id')
 
-write.csv(electricity2, '~/Catalyst/MTF_Nigeria/data/nigeria_grid_access_ext.csv')
-
-solar <- haven_read('MTF_NG_HH_SEC_C_SOLAR.dta')
-solar2 <- electricity2 %>%
-  select(1 | 108:111 | 137:154)
-
-solar <- 
-  list(solar, elc_aggr_tier) %>%  
-  reduce(inner_join, by='hh_id')
-
-solar <-
-  list(solar, solar2) %>%
-  reduce(inner_join, by='hh_id')
-
-solar$c137[which(is.na(solar$c137))] <- 0
-solar$c138[which(is.na(solar$c138))] <- 0
-solar$c139[which(is.na(solar$c139))] <- 0
-
-solar <- solar %>%
-  mutate(
-    percent_lantern = solar$c137/solar$sum_solar*100,
-    percent_lighting = solar$c138/solar$sum_solar*100,
-    percent_home = solar$c139/solar$sum_solar*100
-  )
-
-write.csv(solar, '~/Catalyst/MTF_Nigeria/data/nigeria_grid_solar.csv')
-
-cooking <- haven_read('MTF_NG_HH_SEC_I_STOVE.dta')
-cooking <- 
-  list(cooking, elc_aggr_tier) %>%  
-  reduce(inner_join, by='hh_id')
-
-write.csv(cooking, '~/Catalyst/MTF_Nigeria/data/nigeria_cooking.csv')
-
-stopgap <- haven_read('MTF_NG_HH_SEC_F.dta')
-stopgap2 <- haven_read('MTF_NG_HH_SEC_F_FUEL.dta')
-stopgap <- 
-  list(stopgap, stopgap2, elc_aggr_tier) %>%  
-  reduce(inner_join, by='hh_id')
-
-write.csv(stopgap, '~/Catalyst/MTF_Nigeria/data/nigeria_stopgap.csv')
-
+write.csv(housing_expense, '~/Catalyst/MTF_Nigeria/data/nigeria_housing_expense.csv')
