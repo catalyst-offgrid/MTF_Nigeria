@@ -112,3 +112,12 @@ cooking <-
   reduce(inner_join, by='hh_id')
 
 write.csv(cooking, '~/Catalyst/MTF_Nigeria/data/nigeria_cooking.csv')
+
+stopgap <- haven_read('MTF_NG_HH_SEC_F.dta')
+stopgap2 <- haven_read('MTF_NG_HH_SEC_F_FUEL.dta')
+stopgap <- 
+  list(stopgap, stopgap2, elc_aggr_tier) %>%  
+  reduce(inner_join, by='hh_id')
+
+write.csv(stopgap, '~/Catalyst/MTF_Nigeria/data/nigeria_stopgap.csv')
+
