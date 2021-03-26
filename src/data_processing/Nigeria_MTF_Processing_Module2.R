@@ -68,10 +68,18 @@ wtp_solar <-
 
 write.csv(wtp_solar, '~/Catalyst/MTF_Nigeria/data/nigeria_wtp_solar.csv')
 
-housing_expense <- haven_read("MTF_NG_HH_SEC_L_30_DAYS_EXPEN.dta") #wtp = willingness to pay
+housing_expense <- haven_read("MTF_NG_HH_SEC_L_30_DAYS_EXPEN.dta") 
 
 housing_expense <- 
   list(housing_expense, elc_aggr_tier) %>%  
   reduce(inner_join, by='hh_id')
 
 write.csv(housing_expense, '~/Catalyst/MTF_Nigeria/data/nigeria_housing_expense.csv')
+
+cooking_expense <- haven_read("MTF_NG_HH_SEC_K.dta") 
+
+cooking_expense <- 
+  list(cooking_expense, elc_aggr_tier) %>%  
+  reduce(inner_join, by='hh_id')
+
+write.csv(cooking_expense, '~/Catalyst/MTF_Nigeria/data/nigeria_cooking_expense.csv')
