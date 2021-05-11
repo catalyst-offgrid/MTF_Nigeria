@@ -20,21 +20,21 @@ haven_read <- function(file_name, read_factor = 1){
   }
   names(df) <- tolower(names(df))
   return(df)
-  
+
 }
 stata_read <- function(file_name){
   df <- readstata13::read.dta13(file_name)
   names(df) <- tolower(names(df))
   return(df)
-  
+
 }
 source_use_freq <- function(test_str, var_name){
-  freqTemp <- 
-    mtf2[,str_detect(question_labs, test_str)] %>%  
+  freqTemp <-
+    mtf2[,str_detect(question_labs, test_str)] %>%
     rename(var_name = 1)
-  freqTemp <- cbind(mtf_info,freqTemp) 
-  freqTemp %>% 
-    group_by(!! sym(var_name)) %>% 
+  freqTemp <- cbind(mtf_info,freqTemp)
+  freqTemp %>%
+    group_by(!! sym(var_name)) %>%
     summarise(total = n())
   return(freqOut)
 }
@@ -62,24 +62,32 @@ grepl('locality', names(test), ignore.case = T)
 #electricity <- data.frame(merged_StataList[[8]])
 wtp_solar <- haven_read('MTF_NG_HH_SEC_E.dta') #wtp = willingness to pay
 
-wtp_solar <- 
-  list(wtp_solar, elc_aggr_tier) %>%  
+wtp_solar <-
+  list(wtp_solar, elc_aggr_tier) %>%
   reduce(inner_join, by='hh_id')
 
 write.csv(wtp_solar, '~/Catalyst/MTF_Nigeria/data/nigeria_wtp_solar.csv')
 
-housing_expense <- haven_read("MTF_NG_HH_SEC_L_30_DAYS_EXPEN.dta") 
+housing_expense <- haven_read("MTF_NG_HH_SEC_L_30_DAYS_EXPEN.dta")
 
-housing_expense <- 
-  list(housing_expense, elc_aggr_tier) %>%  
+housing_expense <-
+  list(housing_expense, elc_aggr_tier) %>%
   reduce(inner_join, by='hh_id')
 
 write.csv(housing_expense, '~/Catalyst/MTF_Nigeria/data/nigeria_housing_expense.csv')
 
-cooking_expense <- haven_read("MTF_NG_HH_SEC_K.dta") 
+cooking_expense <- haven_read("MTF_NG_HH_SEC_K.dta")
 
-cooking_expense <- 
-  list(cooking_expense, elc_aggr_tier) %>%  
+cooking_expense <-
+  list(cooking_expense, elc_aggr_tier) %>%
   reduce(inner_join, by='hh_id')
 
 write.csv(cooking_expense, '~/Catalyst/MTF_Nigeria/data/nigeria_cooking_expense.csv')
+
+wtp_grid <- haven_read('NG_MTF_HH_SEC_D.dta')
+
+wtp_grid <-
+  list(wtp_grid, elc_aggr_tier) %>%
+  reduce(inner_join, by='hh_id')
+
+write.csv(wtp_grid, '~/Catalyst/MTF_Nigeria/data/nga_wtp_grid.csv')
