@@ -73,4 +73,76 @@ finance <-
   list(finance, elc_aggr_tier) %>%
   reduce(inner_join, by='hh_id')
 
+finance <- finance %>%
+  transform(
+    b17__1 = as.character(b17__1),
+    b17__2 = as.character(b17__2),
+    b17__3 = as.character(b17__3),
+    b17__555 = as.character(b17__555)
+  )
+
+finance <- finance %>%
+  mutate(account_institution= case_when(
+    b17__1=='Yes' ~ 'Commercial Bank',
+    b17__2=='Yes' ~ 'Cooperative Credit Union',
+    b17__3=='Yes' ~'Microfinance Institution',
+    b17__555=='Yes' ~ 'Other')
+  )
+
+finance$account_institution[1906] = "Commercial Bank and Microfinance Institution"
+
+for (i in c(867, 1852, 1866, 2028, 2093, 2147, 2187, 2259, 2455, 2495, 2496, 3434)) {
+  finance$account_institution[i] = "Commercial Bank and Cooperative Credit Union"
+}
+
+finance <- finance %>%
+  transform(
+    b19__1 = as.character(b19__1),
+    b19__2 = as.character(b19__2),
+    b19__555 = as.character(b19__555)
+  )
+
+finance <- finance %>%
+  mutate(informal_institution= case_when(
+    b19__1=='Yes' ~ 'Group Savings (Rotational)',
+    b19__2=='Yes' ~ 'Group Savings (One-Time Disbursement)',
+    b19__555=='Yes' ~ 'Other')
+  )
+
+finance <- finance %>%
+  transform(
+    b20__1 = as.character(b20__1),
+    b20__2 = as.character(b20__2),
+    b20__3 = as.character(b20__3),
+    b20__4 = as.character(b20__4),
+    b20__5 = as.character(b20__5),
+    b20__6 = as.character(b20__6),
+    b20__7 = as.character(b20__7),
+    b20__8 = as.character(b20__8),
+    b20__9 = as.character(b20__9),
+    b20__10 = as.character(b20__10),
+    b20__11 = as.character(b20__11),
+    b20__12 = as.character(b20__12),
+    b20__13 = as.character(b20__13),
+    b20__555 = as.character(b20__555)
+  )
+
+finance <- finance %>%
+  mutate(loan= case_when(
+    b20__1=='Yes' ~ 'Commercial/Government Bank',
+    b20__2=='Yes' ~ 'Cooperative Credit Union/SACCO',
+    b20__3=='Yes' ~ 'Microfinance Instituion',
+    b20__4=='Yes' ~ 'Rural Bank',
+    b20__5=='Yes' ~ 'State Loan',
+    b20__6=='Yes' ~ 'NGO',
+    b20__7=='Yes' ~ 'Business Firm',
+    b20__8=='Yes' ~ 'Employer',
+    b20__9=='Yes' ~ 'Moneylender/Shylock',
+    b20__10=='Yes' ~ 'Shop',
+    b20__11=='Yes' ~ 'Relative/Friend/Neighbor',
+    b20__12=='Yes' ~ 'Mobile Money Services',
+    b20__13=='Yes' ~ 'Cannot get a loan/credit',
+    b20__555=='Yes' ~ 'Other')
+  )
+
 write.csv(finance, '~/Catalyst/MTF_Nigeria/data/nigeria_finance.csv')
