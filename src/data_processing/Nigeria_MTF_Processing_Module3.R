@@ -145,4 +145,19 @@ finance <- finance %>%
     b20__555=='Yes' ~ 'Other')
   )
 
+electricity <- haven_read('MTF_NG_HH_SEC_C.dta') #Clean electricity data for grid access filter
+electricity <- electricity %>%
+  select(1, 4)
+
+finance <- #add grid access column to finance dataset
+  list(finance, electricity) %>%  
+  reduce(inner_join, by='hh_id')
+
+cooking <- haven_read('MTF_NG_HH_SEC_I_STOVE.dta') %>%
+  select(c(1, 3, 33, 55))
+
+finance <- #add grid access column to finance dataset
+  list(finance, cooking) %>%  
+  reduce(inner_join, by='hh_id')
+
 write.csv(finance, '~/Catalyst/MTF_Nigeria/data/nigeria_finance.csv')

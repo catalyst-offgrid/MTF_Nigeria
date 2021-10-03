@@ -62,7 +62,7 @@ grepl('locality', names(test), ignore.case = T)
 #electricity <- data.frame(merged_StataList[[8]])
 electricity <- haven_read('MTF_NG_HH_SEC_C.dta')
 electricity <- electricity %>%
-  select(1:72) %>%
+  select(1:128) %>%
   select(-2)
 
 electricity <- 
