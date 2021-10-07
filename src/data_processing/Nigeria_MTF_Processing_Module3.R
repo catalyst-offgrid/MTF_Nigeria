@@ -4,12 +4,12 @@ library(tidyr)
 #library(RCMIP5)
 library(haven)
 library(readstata13)
-library(foreign)
-library(sjlabelled)
-library(expss)
+#library(foreign)
+#library(sjlabelled)
+#library(expss)
 library(seplyr)
-library(fastDummies)
-library(purrr)
+#library(fastDummies)
+#library(purrr)
 setwd("~/Catalyst/MTF_Nigeria/src/data_processing/raw_data") #Change file path for personal use
 
 haven_read <- function(file_name, read_factor = 1){
@@ -52,11 +52,6 @@ elc_aggr_tier <- nga_dta[,c(16,22,1)]
 # View the first data set, "MTF_HH_SEC_C_BATTERY.dta"
 # test returns the sub dataset from the list, test2 returns the dataset with questions tagged.
 test <- data.frame(merged_StataList[[33]])
-#test2 <- haven_read('MTF_HH_SEC_C_BATTERY.dta')
-
-# Try to combine list of 33 elements - DO NOT RUN
-#test2 <- data.frame(matrix(unlist(merged_StataList), nrow=2, byrow=TRUE), stringsAsFactors=FALSE)
-#rm(test2)
 
 #electricity <- data.frame(merged_StataList[[8]])
 electric_assets <- haven_read('MTF_NG_HH_SEC_N_ELEC_ASSET.dta') 
@@ -89,8 +84,18 @@ finance <- finance %>%
     b17__555=='Yes' ~ 'Other')
   )
 
+#Check for multiple account holdings
+which(finance$b17__1=='Yes'&finance$b17__2=='Yes')
+which(finance$b17__1=='Yes'&finance$b17__3=='Yes')
+which(finance$b17__1=='Yes'&finance$b17__555=='Yes')
+which(finance$b17__2=='Yes'&finance$b17__3=='Yes')
+which(finance$b17__2=='Yes'&finance$b17__555=='Yes')
+which(finance$b17__3=='Yes'&finance$b17__555=='Yes')
+
+#Change account_institution value for row 1906 due to multiple account holdings
 finance$account_institution[1906] = "Commercial Bank and Microfinance Institution"
 
+#Change account_institution value for following rows due to multiple account holdings
 for (i in c(867, 1852, 1866, 2028, 2093, 2147, 2187, 2259, 2455, 2495, 2496, 3434)) {
   finance$account_institution[i] = "Commercial Bank and Cooperative Credit Union"
 }
@@ -143,6 +148,40 @@ finance <- finance %>%
     b20__12=='Yes' ~ 'Mobile Money Services',
     b20__13=='Yes' ~ 'Cannot get a loan/credit',
     b20__555=='Yes' ~ 'Other')
+  )
+
+finance <- finance %>%
+  transform(
+    b24__1 = as.character(b24__1),
+    b24__2 = as.character(b24__2),
+    b24__3 = as.character(b24__3),
+    b24__4 = as.character(b24__4),
+    b24__5 = as.character(b24__5),
+    b24__6 = as.character(b24__6),
+    b24__7 = as.character(b24__7),
+    b24__8 = as.character(b24__8),
+    b24__9 = as.character(b24__9),
+    b24__10 = as.character(b24__10),
+    b24__11 = as.character(b24__11),
+    b24__12 = as.character(b24__12),
+    b24__555 = as.character(b24__555)
+  )
+
+finance <- finance %>%
+  mutate(mobile_pay_usage= case_when(
+    b24__1=='Yes' ~ 'Receive money from family/friends/other',
+    b24__2=='Yes' ~ 'Transfer credit to family/relatives',
+    b24__3=='Yes' ~ 'Top up credit',
+    b24__4=='Yes' ~ 'Receive NGO/State support',
+    b24__5=='Yes' ~ 'Pay for Electricity',
+    b24__6=='Yes' ~ 'Pay for Water',
+    b24__7=='Yes' ~ 'Internet top-up/credit',
+    b24__8=='Yes' ~ 'Commercial purchases',
+    b24__9=='Yes' ~ 'Insurance',
+    b24__10=='Yes' ~ 'Loan Payments',
+    b24__11=='Yes' ~ 'Savings',
+    b24__12=='Yes' ~ 'Get small loans from mobile provider',
+    b24__555=='Yes' ~ 'Other')
   )
 
 electricity <- haven_read('MTF_NG_HH_SEC_C.dta') #Clean electricity data for grid access filter

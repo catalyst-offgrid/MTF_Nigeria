@@ -91,3 +91,5 @@ wtp_grid <-
   reduce(inner_join, by='hh_id')
 
 write.csv(wtp_grid, '~/Catalyst/MTF_Nigeria/data/nga_wtp_grid.csv')
+
+lighting <- haven_read('MTF_NG_HH_SEC_F.dta')
