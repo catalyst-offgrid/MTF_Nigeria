@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .error {
+        color: red;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega@5"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-lite@4.8.1"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"width": 800, "height": 400, "config": {"title": {"fontSize": 18, "font": "Open Sans", "anchor": "center", "fontColor": "#000000"}, "axisX": {"domain": true, "domainColor": "#000000", "grid": false, "labelFont": "Open Sans", "labelFontSize": 14, "titleFont": "Open Sans", "titleFontSize": 13, "titleFontWeight": "normal", "title": "X Axis Title (units)"}, "axisY": {"domain": true, "grid": false, "gridColor": "#DEDDDD", "gridWidth": 1, "labelFont": "Open Sans", "labelFontSize": 14, "labelAngle": 0, "ticks": false, "titleFont": "Open Sans", "titleFontSize": 14, "titleFontWeight": "normal", "titlePadding": 10, "title": "Y Axis Title (units)"}, "range": {"category": ["#2980B9", "#003366", "#FFAE19", "#FF4500", "#438B28", "#45B39D", "#99ADC1", "#212F3C"]}, "legend": {"labelFont": "Open Sans", "labelFontSize": 14, "symbolType": "square", "symbolSize": 100, "titleFont": "Open Sans", "titleFontSize": 14, "titleFontWeight": "normal", "title": "Legend", "orient": "right", "offset": 0}, "tooltip": {"font": "Open Sans"}, "font": {"font": "Open Sans"}, "view": {"stroke": "transparent", "text": {"font": "Open Sans", "color": ["#2980B9", "#003366", "#FFAE19", "#FF4500", "#438B28", "#45B39D", "#99ADC1", "#212F3C"], "fontSize": 14, "align": "right", "fontWeight": 400, "size": 14}, "bar": {"size": 40, "binSpacing": 1, "continuousBandSize": 30, "discreteBandSize": 30, "fill": ["#2980B9", "#003366", "#FFAE19", "#FF4500", "#438B28", "#45B39D", "#99ADC1", "#212F3C"], "stroke": false}}}, "layer": [{"mark": "bar", "encoding": {"tooltip": {"type": "nominal", "field": "Source"}, "x": {"type": "nominal", "field": "Source", "sort": {"field": "Source", "op": "count", "order": "descending"}}, "y": {"type": "quantitative", "axis": {"format": "%", "title": ""}, "field": "Response"}}, "height": 400, "width": 500}, {"mark": {"type": "text", "align": "center", "baseline": "bottom"}, "encoding": {"text": {"type": "quantitative", "field": "Response", "format": ".2%"}, "tooltip": {"type": "nominal", "field": "Source"}, "x": {"type": "nominal", "field": "Source", "sort": {"field": "Source", "op": "count", "order": "descending"}}, "y": {"type": "quantitative", "axis": {"format": "%", "title": ""}, "field": "Response"}}, "height": 400, "title": {"text": ["If you can get a loan/credit, what are the sources of credit/loans?"], "subtitle": ["You are viewing 99.02% of responses from the Nigeria Multi-Tiered Framework Survey.", " "], "color": "black", "subtitleColor": "black"}, "width": 500}], "data": {"name": "data-567f6f375578b99eace5400526fcc526"}, "$schema": "https://vega.github.io/schema/vega-lite/v4.8.1.json", "datasets": {"data-567f6f375578b99eace5400526fcc526": [{"Source": "Relative/friend/neighbor", "Response": 0.670693404203914}, {"Source": "Cannot get a loan or credit", "Response": 0.23000724812756704}, {"Source": "Commercial/government bank", "Response": 0.09108480309253443}, {"Source": "Shop", "Response": 0.03309978255617299}, {"Source": "Microfinance institution", "Response": 0.013771442377385841}, {"Source": "Other", "Response": 0.009664170089393574}, {"Source": "Cooperative credit union/SACCO", "Response": 0.008939357332689055}, {"Source": "Business firm", "Response": 0.006040106305870983}, {"Source": "NGO", "Response": 0.005556897801401305}, {"Source": "Employer", "Response": 0.004590480792461948}, {"Source": "State loan", "Response": 0.00362406378352259}, {"Source": "Moneylender/Shylock", "Response": 0.0019328340178787146}, {"Source": "Rural bank", "Response": 0.0019328340178787146}, {"Source": "Mobile money services", "Response": 0.0016912297656438754}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div class="error" style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>
