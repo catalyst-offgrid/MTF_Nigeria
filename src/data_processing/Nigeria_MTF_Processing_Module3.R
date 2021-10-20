@@ -199,4 +199,20 @@ finance <- #add grid access column to finance dataset
   list(finance, cooking) %>%  
   reduce(inner_join, by='hh_id')
 
+for (i in 41:54) {
+  finance[i] <- ifelse(finance[i]=='Yes', 1, 0)
+}
+
+for (i in 59:71) {
+  finance[i] <- ifelse(finance[i]=='Yes', 1, 0)
+}
+
 write.csv(finance, '~/Catalyst/MTF_Nigeria/data/nigeria_finance.csv')
+
+land <- haven_read('MTF_NG_MTF_HH_SEC_O.dta') #units of land owned by respondent
+
+land <-
+  list(land, elc_aggr_tier) %>%
+  reduce(inner_join, by='hh_id')
+
+write.csv(land, '~/Catalyst/MTF_Nigeria/data/nigeria_land.csv')
