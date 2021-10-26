@@ -4,12 +4,12 @@ library(tidyr)
 #library(RCMIP5)
 library(haven)
 library(readstata13)
-library(foreign)
-library(sjlabelled)
-library(expss)
+#library(foreign)
+#library(sjlabelled)
+#library(expss)
 library(seplyr)
-library(fastDummies)
-library(purrr)
+#library(fastDummies)
+#library(purrr)
 setwd("~/Catalyst/MTF_Nigeria/src/data_processing/raw_data") #Change file path for personal use
 
 haven_read <- function(file_name, read_factor = 1){
@@ -68,13 +68,44 @@ wtp_solar <-
 
 write.csv(wtp_solar, '~/Catalyst/MTF_Nigeria/data/nigeria_wtp_solar.csv')
 
-housing_expense <- haven_read("MTF_NG_HH_SEC_L_30_DAYS_EXPEN.dta")
+housing_expense_30days <- haven_read("MTF_NG_HH_SEC_L_30_DAYS_EXPEN.dta")
 
-housing_expense <-
-  list(housing_expense, elc_aggr_tier) %>%
+housing_expense_30days <-
+  list(housing_expense_30days, elc_aggr_tier) %>%
   reduce(inner_join, by='hh_id')
 
-write.csv(housing_expense, '~/Catalyst/MTF_Nigeria/data/nigeria_housing_expense.csv')
+cooking <- haven_read('MTF_NG_HH_SEC_I_STOVE.dta') %>% #get primary cooking fuel and stove info
+  select(c(1, 3, 33, 56))
+
+housing_expense_30days <- #add cooking fuel and stove info
+  list(housing_expense_30days, cooking) %>%  
+  reduce(inner_join, by='hh_id')
+
+write.csv(housing_expense_30days, '~/Catalyst/MTF_Nigeria/data/nga_housing_expense_30days.csv')
+
+housing_expense_year <- haven_read("MTF_NG_HH_SEC_L_12_MONTHS_EXPEN.dta")
+
+housing_expense_year <-
+  list(housing_expense_year, elc_aggr_tier) %>%
+  reduce(inner_join, by='hh_id')
+
+housing_expense_year <- #add cooking fuel and stove info
+  list(housing_expense_year, cooking) %>%  
+  reduce(inner_join, by='hh_id')
+
+write.csv(housing_expense_year, '~/Catalyst/MTF_Nigeria/data/nga_housing_expense_year.csv')
+
+housing_expense_consumption <- haven_read("MTF_NG_HH_SEC_L_CONSUMPTION.dta")
+
+housing_expense_consumption <-
+  list(housing_expense_consumption, elc_aggr_tier) %>%
+  reduce(inner_join, by='hh_id')
+
+housing_expense_consumption <- #add cooking fuel and stove info
+  list(housing_expense_consumption, cooking) %>%  
+  reduce(inner_join, by='hh_id')
+
+write.csv(housing_expense_consumption, '~/Catalyst/MTF_Nigeria/data/nga_housing_consumption.csv')
 
 cooking_expense <- haven_read("MTF_NG_HH_SEC_K.dta")
 

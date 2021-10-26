@@ -195,7 +195,7 @@ finance <- #add grid access column to finance dataset
 cooking <- haven_read('MTF_NG_HH_SEC_I_STOVE.dta') %>%
   select(c(1, 3, 33, 55))
 
-finance <- #add grid access column to finance dataset
+finance <- #add cooking fuel and stove to finance dataset
   list(finance, cooking) %>%  
   reduce(inner_join, by='hh_id')
 
