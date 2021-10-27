@@ -47,7 +47,7 @@ nga_dta<- haven_read('NGA.dta')
 # names(nga_dta)[names(nga_dta) == "hh_id"] <- "HH_ID"
 nga_dta <- nga_dta %>%
   mutate(locality = ifelse(nga_dta$rur == 'Rural', 1, 0))
-elc_aggr_tier <- nga_dta[,c(16,22,1)]
+elc_aggr_tier <- nga_dta[,c(8,16,22,1)]
 
 # View the first data set, "MTF_HH_SEC_C_BATTERY.dta"
 # test returns the sub dataset from the list, test2 returns the dataset with questions tagged.
