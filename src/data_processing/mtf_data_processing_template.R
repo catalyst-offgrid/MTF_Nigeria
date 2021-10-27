@@ -48,6 +48,10 @@ source_use_freq <- function(test_str, var_name){
 StataList <- list.files(pattern = '*.dta')
 merged_StataList <- lapply(list.files(pattern="*.dta",recursive=FALSE, full.names=TRUE), readstata13::read.dta13, nonint.factors = TRUE)
 
+# View the first data set, "MTF_HH_SEC_C_BATTERY.dta"
+# test returns the sub dataset from the list, test2 returns the dataset with questions tagged.
+test <- data.frame(merged_StataList[[33]])
+
 #Read in overall country data
 nga_dta<- haven_read('NGA.dta') 
 
@@ -56,10 +60,6 @@ nga_dta<- haven_read('NGA.dta')
 nga_dta <- nga_dta %>%
   mutate(locality = ifelse(nga_dta$rur == 'Rural', 1, 0))
 elc_aggr_tier <- nga_dta[,c(16,22,1)]
-
-# View the first data set, "MTF_HH_SEC_C_BATTERY.dta"
-# test returns the sub dataset from the list, test2 returns the dataset with questions tagged.
-test <- data.frame(merged_StataList[[33]])
 
 #Read in a dataset
 placeholder <- haven_read('placeholder.dta') 
