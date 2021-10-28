@@ -123,4 +123,19 @@ wtp_grid <-
 
 write.csv(wtp_grid, '~/Catalyst/MTF_Nigeria/data/nga_wtp_grid.csv')
 
-lighting <- haven_read('MTF_NG_HH_SEC_F.dta')
+lamps <- haven_read('MTF_NG_HH_SEC_G_LAMP_CANDLE.dta')
+
+lamps <-
+  list(lamps, elc_aggr_tier) %>%
+  reduce(inner_join, by='hh_id')
+
+write.csv(lamps, '~/Catalyst/MTF_Nigeria/data/nga_lamps_expenses.csv')
+
+lighting <- haven_read('MTF_NG_HH_SEC_G_LIGHT.dta')
+
+lighting <-
+  list(lighting, elc_aggr_tier) %>%
+  reduce(inner_join, by='hh_id')
+
+write.csv(lighting, '~/Catalyst/MTF_Nigeria/data/nga_lighting_expenses.csv')
+
