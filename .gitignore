@@ -1,7 +1,2 @@
-.DS_Store
-charts/.DS_Store
-charts/module1_grid_access/.ipynb_checkpoints/
-charts/module3/.ipynb_checkpoints/
-src/.DS_Store
-src/data_processing/.DS_Store
-charts/.ipynb_checkpoints/chart_skeleton_code-checkpoint.ipynb
+*.DS_Store
+*.ipynb_checkpoints
